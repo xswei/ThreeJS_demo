@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3D-Earth</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<script src="../libs/three.js"></script>
+	<script src="../libs/orbit_controls.js"></script>
+	<script src="../libs/stats.js"></script>
+</head>
+<body>
+	<div id="main">
+		<div id="stats"></div>
+		<div id="map"></div>
+	</div>
+	<script>
+		window.onload = ()=>{
+			var width = document.querySelector("#map").clientWidth,
+				height = document.querySelector("#map").clientHeight;
+			var stats = initStats();
+
+			var earthR = 200;
+
+			var scene = new THREE.Scene();
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setClearColor(0xffffff);
+			renderer.setSize(width,height);
+
+			var camera = new THREE.PerspectiveCamera(45,width/height,0.1,1000);
+			camera.position.x = -300;
+			camera.position.y = 300;
+			camera.position.z = 300;
+			camera.lookAt(scene.position);
+
+			var orbit = new THREE.OrbitControls(camera,renderer.domElement);
+
+			addEarth(scene,earthR);
+
+			document.querySelector("#map").appendChild(renderer.domElement);
+			render();
+			function render(){
+				stats.update();
+				orbit.update();
+
+				requestAnimationFrame(render);
+			}
+		}
+		function initStats(){
+			var s = new Stats();
+			s.domElement.style.position = "absolute";
+			s.domElement.style.left = "10px";
+			s.domElement.style.top = "10px";
+			document.querySelector("#stats").appendChild(s.domElement);
+			return s;
+		}
+		function addEarth(s,r){
+			var sphere = new THREE.SphereGeometry(r,40,40);
+			var material = new THREE.
+		}
+	</script>
+</body>
+</html>

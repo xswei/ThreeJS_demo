@@ -1,0 +1,21 @@
+*{
+	margin:0px;
+	box-sizing: border-box;
+}
+html,body{
+	height:100%;
+}
+#main{
+	height:100%;
+	width: 100%;
+	overflow:hidden;
+	position: relative;
+}
+#stats{
+	position: absolute;
+}
+#map{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
