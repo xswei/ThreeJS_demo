@@ -7,10 +7,23 @@
 	<script src="../libs/three.js"></script>
 	<script src="../libs/orbit_controls.js"></script>
 	<script src="../libs/stats.js"></script>
+	<style>
+		#button{
+			position: absolute;
+			right: 10px;
+			top:10px;
+			z-index: 99;
+		}
+	</style>
 </head>
 <body>
 	<div id="main">
 		<div id="stats"></div>
+		<div id="button">
+			<button id="1">贴图 1</button>
+			<button id="2">贴图 2</button>
+			<button id="3">贴图 3</button>
+		</div>
 		<div id="map"></div>
 	</div>
 	<script>
@@ -23,7 +36,7 @@
 
 			var scene = new THREE.Scene();
 			var renderer = new THREE.WebGLRenderer();
-			renderer.setClearColor(0xffffff);
+			renderer.setClearColor(0x000000);
 			renderer.setSize(width,height);
 
 			var camera = new THREE.PerspectiveCamera(45,width/height,0.1,1000);
@@ -34,14 +47,20 @@
 
 			var orbit = new THREE.OrbitControls(camera,renderer.domElement);
 
+			scene.add(new THREE.AxisHelper(20))
+
 			addEarth(scene,earthR);
+			bindEvent(scene);
 
 			document.querySelector("#map").appendChild(renderer.domElement);
 			render();
 			function render(){
 				stats.update();
 				orbit.update();
-
+				if(scene.getObjectByName("earth")){
+					scene.getObjectByName("earth").rotation.y += 0.003;
+				}
+				renderer.render(scene,camera);
 				requestAnimationFrame(render);
 			}
 		}
@@ -55,7 +74,39 @@
 		}
 		function addEarth(s,r){
 			var sphere = new THREE.SphereGeometry(r,40,40);
-			var material = new THREE.
+			var loader = new THREE.TextureLoader();
+			loader.load("../images/e1.png",(t)=>{
+				let material = new THREE.MeshBasicMaterial({
+					map:t
+				});
+				let earth = new THREE.Mesh(sphere,material);
+				earth.name = "earth";
+				earth.textureName = "1";
+				s.add(earth);
+			})
+		}
+		function bindEvent(s){
+			var button = document.querySelectorAll("#button button");
+			button.forEach(function(d){
+				d.addEventListener("click",(e)=>{
+					let id = e.target.id;
+					let earth = s.getObjectByName("earth");
+					console.log(earth)
+					if(earth.textureName==id){
+						return;
+					}else{
+						let loader = new THREE.TextureLoader();
+						loader.load("../images/e"+id+".png",(t)=>{
+							let material = new THREE.MeshBasicMaterial({
+								map:t
+							});
+							earth.material = material;
+							earth.textureName = id;
+							earth.material.needsUpdate = true;
+						})
+					}
+				})
+			})
 		}
 	</script>
 </body>
