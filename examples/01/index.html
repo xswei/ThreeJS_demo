@@ -47,10 +47,8 @@
 
 			var orbit = new THREE.OrbitControls(camera,renderer.domElement);
 
-			scene.add(new THREE.AxisHelper(20))
-
-			addEarth(scene,earthR);
-			bindEvent(scene);
+			addEarth(scene,earthR);	//添加地球
+			bindEvent(scene); 	//绑定切换贴图事件
 
 			document.querySelector("#map").appendChild(renderer.domElement);
 			render();
@@ -74,20 +72,22 @@
 		}
 		function addEarth(s,r){
 			var sphere = new THREE.SphereGeometry(r,40,40);
+
+			//加载纹理
 			var loader = new THREE.TextureLoader();
 			loader.load("../images/e1.png",(t)=>{
 				let material = new THREE.MeshBasicMaterial({
 					map:t
 				});
 				let earth = new THREE.Mesh(sphere,material);
-				earth.name = "earth";
+				earth.name = "earth"; 
 				earth.textureName = "1";
 				s.add(earth);
 			})
 		}
 		function bindEvent(s){
 			var button = document.querySelectorAll("#button button");
-			button.forEach(function(d){
+			button.forEach((d)=>{
 				d.addEventListener("click",(e)=>{
 					let id = e.target.id;
 					let earth = s.getObjectByName("earth");
