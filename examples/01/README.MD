@@ -34,3 +34,5 @@ loader是一个纹理加载器，调用loader的load方法，并传入加载成�
 
 在使用图片作为纹理时，要注意图片的宽高必须要为2的整数次幂。比如128，256，512...，否则会被调整。
 
+![image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/01/pic.jpg)
+
