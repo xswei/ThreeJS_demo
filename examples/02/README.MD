@@ -43,7 +43,7 @@
 
 现在要计算phi和theta,球的phi值默认为0，起始点为x轴负方向。theta值默认为0，起始位置为y轴正方向。
 
-![image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/02/zzx.jpg)
+![image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/02/zzx.png)
 
 
 phi的值为0-Math.PI,phi对应的经度范围为-180到180. 那么经纬为lng对应的phi弧度值为(180-lng)*(Math.PI/180)
