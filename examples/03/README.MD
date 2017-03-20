@@ -3,7 +3,7 @@
 这部分主要将前面学到的地理投影应用一下，载三维地球上绘制全球机场分布。
 
 
-[!image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/03/points.png)
+![image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/03/points.png)
 
 ### 绘制地球
 
