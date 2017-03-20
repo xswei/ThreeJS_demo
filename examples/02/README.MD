@@ -50,5 +50,60 @@ phi的值为0-Math.PI,phi对应的经度范围为-180到180. 那么经纬为lng�
 
 theta的值为-Math.PI/2到Math.PI/2.theta对应的维度范围为90到-90.维度为lat对应的theta值为(90+lat)*(Math.PI/180)
 
-此时再结合半径和三角函数可以计算出三维坐标
+此时再结合半径和三角函数可以计算出三维坐标.
 
+
+
+### 计算方法
+
+在用Threejs做坐标转化的时候并不需要复杂的计算，借用Three提供的方法即可。
+
+- THREE.Spherical
+- THREE.Vector3
+
+#### THREE.Spherical
+
+THREE.Spherical是three提供的一个球面坐标类，其使用方法如下:
+
+```js
+var spherical = new THREE.Spherical(radius,phi,theta)
+
+```
+
+参数 | 说明
+--- | ---
+radius | 半径，默认1.0
+phi | 以y轴正方向为起点的垂直方向弧度值，默认0
+theta | 以z轴正方向为起点的水平方向弧度值，默认0
+
+注意这里的phi和theta与上面介绍的正好相反，并且水平方向的起始角度为z轴正方形(球的水平方向从x轴负方向开始计算，相差90度)
+
+#### THREE.Vector3
+
+THREE.Vector3用来表示三维向量，这里要使用到的是它的`setFromSpherical`方法，这个方法帮助完成球面坐标和三维直角坐标之间的转化。
+
+ps:两者之间可以互转，参考球面坐标对象的`setFromVector3`方法。
+
+由于spherical对象的水平起始角和球的起始角之间相差90度，为了能正确的对应，只需要将球的phiStart参数设置为90度即可。
+
+### 一个完整的转化代码
+
+```js
+var geoPos = {
+	lng:116,
+	lat:49,
+	r:radius
+}
+
+function geo_to_xyz(v){
+	var theta = (v.lng+180)*(Math.PI/180),
+		phi = (90-v.lat)*(Math.PI/180),
+		radius = v.r;
+	return (new THREE.Vector3()).setFromSpherical(new THREE.Spherical(radius,phi,theta));
+}
+
+var xyz = geo_to_xyz(geoPos); 	//xyz为转换后对应的三维向量
+
+```
+
+此时就可以在[三维地球上绘制一些点](https://github.com/xswei/ThreeJS_demo/tree/master/examples/03)了
