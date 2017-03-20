@@ -2,6 +2,9 @@
 
 这部分主要将前面学到的地理投影应用一下，载三维地球上绘制全球机场分布。
 
+
+[!image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/03/points.png)
+
 ### 绘制地球
 
 在绘制地球时，创建一个THREE.Object3D分组对象，用来放置地球和机场。使用分组的目在于将地球和机场放在一起，这样在地球旋转的时候方便同步控制。
@@ -54,7 +57,10 @@ function addPoints(g,r){
 		csv.forEach((d)=>{
 			let lng = parseFloat(d.Longtitude),
 				lat = parseFloat(d.Latitude);
-			pointGeom.vertices.push(getPos(lng,lat,r+1));
+			pointGeom.vertices.push(getPos({
+				lng:lng,
+				lat:lat,
+				r:r+1}));
 		})
 		let pointMaterial = new THREE.PointsMaterial({
 			color:0x0ff0cc
@@ -72,3 +78,5 @@ function getPos(v){
 }
 
 ```
+
+然后就ok了。
