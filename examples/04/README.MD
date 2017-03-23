@@ -131,3 +131,8 @@ function interVector3(l){
 - 3: 这里做两个副本，是因为在对向量进行add运算时会改变其值
 - 4: m为所求的系数，做缩放用
 
+
+
+小结：这种插值法其实是一种二分插值方法。
+
+接下来就可以在球面上做一些[弧线](https://github.com/xswei/ThreeJS_demo/blob/master/examples/05)了
