@@ -48,7 +48,7 @@
 		addEarth(earthGroup,earthRadius);
 		addPoints(earthGroup,earthRadius)
 
-		document.querySelector("#map").append(renderer.domElement)
+		document.querySelector("#map").appendChild(renderer.domElement)
 
 		render();
 
@@ -74,7 +74,7 @@
 
 			var sphereGeom = new THREE.SphereGeometry(r,40,40,Math.PI/2);
 			var loader = new THREE.TextureLoader();
-			loader.load("../images/e3.png",(t)=>{
+			loader.load("../images/e2.png",(t)=>{
 				let material = new THREE.MeshBasicMaterial({
 					map:t
 				});
@@ -99,10 +99,11 @@
 					pointGeom.vertices.push(getPos({
 						lng:lng,
 						lat:lat,
-						r:r+5}));
+						r:r}));
 				})
 				let pointMaterial = new THREE.PointsMaterial({
-					color:0x0ff0cc
+					color:0x0ff0cc,
+					size:2
 				});
 				let pointsSystem = new THREE.Points(pointGeom,pointMaterial);
 				g.add(pointsSystem);
