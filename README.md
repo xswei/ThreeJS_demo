@@ -5,4 +5,6 @@
 
 ####  (二)[地理坐标和三维空间坐标](https://github.com/xswei/ThreeJS_demo/tree/master/examples/02)
 
-####  (二)[在地球上绘制一些点](https://github.com/xswei/ThreeJS_demo/blob/master/examples/03)
+####  (三)[在地球上绘制一些点](https://github.com/xswei/ThreeJS_demo/blob/master/examples/03)
+
+####  (四)[球面圆弧插值](https://github.com/xswei/ThreeJS_demo/blob/master/examples/04)
