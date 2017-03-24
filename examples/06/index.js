@@ -312,7 +312,7 @@ function displayInfo(s,t,f){
 	var str;
 	if(f){
 		str={
-			str:s+" --> "+t+" LANDED",
+			str:s+" --> "+t+" TAKE OFF",
 			c:"#631dc6"
 		}
 	}else{
