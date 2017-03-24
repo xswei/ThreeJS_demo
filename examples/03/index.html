@@ -90,7 +90,7 @@
 		}
 
 		function addPoints(g,r){
-			d3.csv("./dataset/airport.csv",(err,csv)=>{
+			d3.csv("../dataset/airport.csv",(err,csv)=>{
 				console.log(csv);
 				let pointGeom = new THREE.Geometry();
 				csv.forEach((d)=>{
