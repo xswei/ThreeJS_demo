@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Three JS</title>
+	<script src="./index.js"></script>
+	<script src="../libs/three.js"></script>
+	<script src="../libs/stats.js"></script>
+	<script src="../libs/orbit_controls.js"></script>
+	<script src="https://d3js.org/d3-collection.v1.min.js"></script>
+	<script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
+	<script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+	<script src="https://d3js.org/d3-request.v1.min.js"></script>
+	<style>
+		*{
+			margin:0px;
+			box-sizing: border-box;
+		}
+		html,body{
+			height:100%;
+		}
+		#main{
+			height:100%;
+			width: 100%;
+			overflow:hidden;
+			position: relative;
+		}
+		#stats{
+			position: absolute;
+		}
+		#map{
+			position: absolute;
+			height: 100%;
+		}
+		#button{
+			position: absolute;
+			left: 10px;
+			top:100px;
+			z-index: 99;
+		}
+		#info{
+			position: absolute;
+			height: 100%;
+			right: 0px;
+			width: 500px;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<div id="stats"></div>
+		<div id="button">
+			<button id="1">贴图 1</button><br><br>
+			<button id="2">贴图 2</button><br><br>
+			<button id="3">贴图 3</button><br><br>
+			<button id="4">贴图 4</button>
+		</div>
+		<div id="map"></div>
+		<div id="info">
+			<canvas id="infoC" style="background: black;"></canvas>
+		</div>
+	</div>
+</body>
+</html>
