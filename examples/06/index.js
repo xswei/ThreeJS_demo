@@ -22,6 +22,7 @@ window.onload = ()=>{
 	window.lines = [];
 
 	window.points = [];
+	window.paths = [];
 	
 	//var pointsGeo = new THREE.Geometry();
 
@@ -235,16 +236,17 @@ function createLines(v1,v2,r,s,t){
 	}))
 	sprite.position.copy(curve.getPointAt(0));
 	earthGroup.add(sprite)
-	/*var geometry = new THREE.Geometry();
+	var geometry = new THREE.Geometry();
 	geometry.vertices = curve.getPoints( 50 );
 
 	var material = new THREE.LineBasicMaterial({ 
-		color : 0xff0000 
-	} );*/
+		color : 0xcccccc 
+	} );
 
 	// Create the final object to add to the scene
-	/*var curveObject = new THREE.Line( geometry, material );
-	earthGroup.add(curveObject)*/
+	var curveObject = new THREE.Line( geometry, material );
+	//earthGroup.add(curveObject)
+	//paths.push(curveObject)
 	points.push({
 		path:curve,
 		step:0.005*Math.random(),
@@ -284,7 +286,7 @@ function updatePoints(){
 	}
 	
 	points = newArr;
-	if(points.length<100){
+	if(points.length<200){
 		let n = Math.random()*10
 		console.log(typeof csv)
 		if(typeof csv != "undefined"){
@@ -313,15 +315,15 @@ function displayInfo(s,t,f){
 	if(f){
 		str={
 			str:s+" --> "+t+" TAKE OFF",
-			c:"#631dc6"
+			c:"#00ff00"
 		}
 	}else{
 		str={
 			str:s+" --> "+t+" LANDED",
-			c:"#b1ca17"
+			c:"#0000ff"
 		}
 	}
-	if(infoList.length>20){
+	if(infoList.length>30){
 		infoList.shift();
 		infoList.push(str)
 	}else{
