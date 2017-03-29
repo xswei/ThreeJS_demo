@@ -1,6 +1,6 @@
 window.onload = ()=>{
 	
-	log = console.log.bind(console)
+	log = console.log.bind(console);
 
 	var mapDiv = document.querySelector("#main"),
 		width = mapDiv.clientWidth-500,

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Three JS</title>
+	<script src="./index.js"></script>
+	<script src="../libs/three.js"></script>
+	<script src="../libs/stats.js"></script>
+	<script src="../libs/orbit_controls.js"></script>
+	<style>
+		*{
+			margin:0px;
+			box-sizing: border-box;
+		}
+		html,body{
+			height:100%;
+		}
+		#main{
+			height:100%;
+			width: 100%;
+			overflow:hidden;
+			position: relative;
+		}
+		#stats{
+			position: absolute;
+		}
+		#map{
+			position: absolute;
+			height: 100%;
+			width: 100%;
+		}
+		#button{
+			position: absolute;
+			left: 10px;
+			top:100px;
+			z-index: 99;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<div id="stats"></div>
+		<div id="map"></div>
+	</div>
+</body>
+</html>
