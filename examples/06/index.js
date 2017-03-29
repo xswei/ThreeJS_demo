@@ -1,33 +1,19 @@
 window.onload = ()=>{
-	
-	log = console.log.bind(console);
+	var color = ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
+
 
 	var mapDiv = document.querySelector("#main"),
-		width = mapDiv.clientWidth-500,
+		width = mapDiv.clientWidth,
 		height = mapDiv.clientHeight;
 
-	infoCanvas = document.querySelector("#infoC");
-	infoCanvas.width = 500;
-	infoCanvas.height = height;
 
-	window.infoCtx = infoCanvas.getContext("2d");
-
-	window.infoList = [];
-
-	earthRadius = 150;
+	var earthRadius = 150;
 
 	var stats = initStats();
 	document.querySelector("#stats").appendChild(stats.domElement);
 
-	window.lines = [];
 
-	window.points = [];
-	window.paths = [];
-	
-	//var pointsGeo = new THREE.Geometry();
-
-
-	scene = new THREE.Scene();
+	var scene = new THREE.Scene();
 
 	var renderer = new THREE.WebGLRenderer();
 	//renderer.setClearColor(0xffffff,0);
@@ -41,26 +27,32 @@ window.onload = ()=>{
 	
 	var orbit = new THREE.OrbitControls(camera,renderer.domElement);
 		
-	earthGroup = new THREE.Object3D();
-
+	var earthGroup = new THREE.Object3D();
+	var lineGroup = new THREE.Object3D();
 	scene.add(earthGroup);
+	scene.add(lineGroup);
 
 	addEarth(earthGroup,earthRadius,"earth");
 	
+	
+
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			addAirLine(lineGroup,earthRadius,JSON.parse(xhr.responseText),color)
+		}
+	}
+	xhr.open("GET","../dataset/flights.json",true);
+	xhr.send();
+
 
 	document.querySelector("#map").append(renderer.domElement)
-
 	render();
-
 	bindEvent(scene)
 	function render(){
 		stats.update();
 		orbit.update();
-		updatePoints();
-		earthGroup.rotation.y +=0.003;
-		if(scene.getObjectByName("lines")){
-			updateLines(scene.getObjectByName("lines").children)
-		}
+
 		renderer.render(scene,camera);
 		requestAnimationFrame(render);
 	}
@@ -88,10 +80,35 @@ function addEarth(g,r,str){
 		earth.name = str;
 		earth.textureName = 4;
 		group.add(earth);
-		addPoints(g,r)
 	})
 	g.add(group);
 }
+function addAirLine(g,radius,json,c){
+	console.log(json);
+	for(let i=0,len = json.routes.length;i<len;++i){
+		let r = json.routes[i];
+		let l = {
+			p1:{
+				lng:json.airports[r[1]][3],
+				lat:json.airports[r[1]][4],
+				r:radius
+			},
+			p2:{
+				lng:json.airports[r[2]][3],
+				lat:json.airports[r[2]][4],
+				r:radius
+			}
+		}
+		let curve = createLines(l.p1,l.p2);
+		let geom = new THREE.Geometry();
+		geom.vertices = curve.getPoints(50);
+		var material = new THREE.LineBasicMaterial({
+			color:new THREE.Color(c[r[0]>=9?9:r[0]])
+		})
+		g.add(new THREE.Line(geom,material))
+	}
+}
+
 
 function getPos(v){
 	var theta = (v.lng+180)*(Math.PI/180),
@@ -114,67 +131,6 @@ function addMarker(g,v,r,c){
 }
 
 
-function bindEvent(s){
-	var button = document.querySelectorAll("#button button");
-	button.forEach((d)=>{
-		d.addEventListener("click",(e)=>{
-			let id = e.target.id;
-			let earth = s.getObjectByName("earth");
-			if(earth.textureName==id){
-				return;
-			}else{
-				let loader = new THREE.TextureLoader();
-				let url = "../images/e"+id+"."+(id==4?"jpg":"png")
-				loader.load(url,(t)=>{
-					let material = new THREE.MeshBasicMaterial({
-						map:t
-					});
-					earth.material = material;
-					earth.textureName = id;
-					earth.material.needsUpdate = true;
-				})
-			}
-		})
-	})
-}
-function addPoints(g,r){
-	d3.csv("../dataset/airport.csv",(err,csv)=>{
-		let pointGeom = new THREE.Geometry();
-		window.csv = csv;
-		csv.forEach((d)=>{
-			let lng = parseFloat(d.Longtitude),
-				lat = parseFloat(d.Latitude);
-			pointGeom.vertices.push(getPos({
-				lng:lng,
-				lat:lat,
-				r:r+5}));
-		})
-		let pointMaterial = new THREE.PointsMaterial({
-			color:0x0ff0cc
-		});
-		let pointsSystem = new THREE.Points(pointGeom,pointMaterial);
-		//g.add(pointsSystem);
-
-		
-
-		for(let m =0;m<10;++m){
-			let p1 = csv[Math.floor(Math.random()*csv.length)-1],
-				p2 = csv[Math.floor(Math.random()*csv.length)-1];
-			let v1 = {
-				lng:parseFloat(p1.Longtitude),
-				lat:parseFloat(p1.Latitude),
-				r:r
-			},v2 = {
-				lng:parseFloat(p2.Longtitude),
-				lat:parseFloat(p2.Latitude),
-				r:r
-			};
-			createLines(v1,v2,r,p1.Name,p2.Name);
-			displayInfo(p1.Name,p2.Name,1);
-		}
-		
-	})
-}
 
 
 function interVector3(l){
@@ -200,7 +156,7 @@ function interVector3(l){
 }
 
 
-function createLines(v1,v2,r,s,t){
+function createLines(v1,v2){
 
 	var delta = getPos(v1).angleTo(getPos(v2)),
 		source = v1.name,
@@ -231,107 +187,32 @@ function createLines(v1,v2,r,s,t){
 		intetPoints.vertices[3],
 		v2
 	);
-	var sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-			map:getTexture()
-	}))
-	sprite.position.copy(curve.getPointAt(0));
-	earthGroup.add(sprite)
-	var geometry = new THREE.Geometry();
-	geometry.vertices = curve.getPoints( 50 );
+	return curve;
 
-	var material = new THREE.LineBasicMaterial({ 
-		color : 0xcccccc 
-	} );
 
-	// Create the final object to add to the scene
-	var curveObject = new THREE.Line( geometry, material );
-	//earthGroup.add(curveObject)
-	//paths.push(curveObject)
-	points.push({
-		path:curve,
-		step:0.005*Math.random(),
-		delta:0,
-		points:sprite,
-		source:s,
-		target:t
-	})
 }
-function getTexture(){
-	var canvas = document.createElement("canvas");
-	canvas.width = 32;
-	canvas.height = 32;
 
-	var ctx = canvas.getContext("2d");
- 	var gr = ctx.createRadialGradient(16,16,0,16,16,16);
- 	var color = (new THREE.Color(0xffffff*Math.random())).getStyle()
-    gr.addColorStop(0,color);
-    gr.addColorStop(1,color);
-   // gr.addColorStop(1,'rgba(0,0,0,0)');      
-    ctx.fillStyle = gr;
-    ctx.fillRect(0,0,32,32);
-    var texture = new THREE.Texture(canvas);
-    texture.needsUpdate = true;
-    return texture;
-}
-function updatePoints(){
-	var newArr = [];
-	for(let i=0;i<points.length;++i){
-		points[i].delta += points[i].step;
-		points[i].points.position.copy(points[i].path.getPointAt(points[i].delta))
-		if(points[i].delta<1){
-			newArr.push(points[i]);
-		}else{
-			displayInfo(points[i].source,points[i].target,false)
-		}
-	}
-	
-	points = newArr;
-	if(points.length<200){
-		let n = Math.random()*10
-		console.log(typeof csv)
-		if(typeof csv != "undefined"){
-			for(let j=0;j<n;++j){
-			let p1 = csv[Math.floor(Math.random()*csv.length)-2],
-				p2 = csv[Math.floor(Math.random()*csv.length)-2];
-			let v1 = {
-				lng:parseFloat(p1.Longtitude),
-				lat:parseFloat(p1.Latitude),
-				r:earthRadius
-			},v2 = {
-				lng:parseFloat(p2.Longtitude),
-				lat:parseFloat(p2.Latitude),
-				r:earthRadius
-			};
-			createLines(v1,v2,earthRadius,p1.Name,p2.Name);
-			displayInfo(p1.Name,p2.Name,1);
+
+function bindEvent(s){
+	var button = document.querySelectorAll("#button button");
+	button.forEach((d)=>{
+		d.addEventListener("click",(e)=>{
+			let id = e.target.id;
+			let earth = s.getObjectByName("earth");
+			if(earth.textureName==id){
+				return;
+			}else{
+				let loader = new THREE.TextureLoader();
+				let url = "../images/e"+id+"."+(id==4?"jpg":"png")
+				loader.load(url,(t)=>{
+					let material = new THREE.MeshBasicMaterial({
+						map:t
+					});
+					earth.material = material;
+					earth.textureName = id;
+					earth.material.needsUpdate = true;
+				})
 			}
-		}
-	}
-}
-
-
-function displayInfo(s,t,f){
-	var str;
-	if(f){
-		str={
-			str:s+" --> "+t+" TAKE OFF",
-			c:"#00ff00"
-		}
-	}else{
-		str={
-			str:s+" --> "+t+" LANDED",
-			c:"#0000ff"
-		}
-	}
-	if(infoList.length>30){
-		infoList.shift();
-		infoList.push(str)
-	}else{
-		infoList.push(str)
-	}
-	infoCtx.clearRect(0,0,infoCanvas.width,infoCanvas.height);
-	infoList.forEach((d,i)=>{
-		infoCtx.fillStyle=d.c
-		infoCtx.fillText(d.str,10,(i+5)*20)
+		})
 	})
 }
