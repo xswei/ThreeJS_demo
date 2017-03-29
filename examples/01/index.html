@@ -92,6 +92,9 @@
 					let id = e.target.id;
 					let earth = s.getObjectByName("earth");
 					console.log(earth)
+					if(!earth){
+						return;
+					}
 					if(earth.textureName==id){
 						return;
 					}else{

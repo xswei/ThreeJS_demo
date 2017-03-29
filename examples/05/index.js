@@ -30,7 +30,7 @@ window.onload = ()=>{
 	addEarth(earthGroup,earthRadius,"earth");
 	
 
-	document.querySelector("#map").append(renderer.domElement)
+	document.querySelector("#map").appendChild(renderer.domElement)
 
 	render();
 

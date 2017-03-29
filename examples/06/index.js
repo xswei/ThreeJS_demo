@@ -46,7 +46,7 @@ window.onload = ()=>{
 	xhr.send();
 
 
-	document.querySelector("#map").append(renderer.domElement)
+	document.querySelector("#map").appendChild(renderer.domElement)
 	render();
 	bindEvent(scene)
 	function render(){
@@ -101,11 +101,14 @@ function addAirLine(g,radius,json,c){
 		}
 		let curve = createLines(l.p1,l.p2);
 		let geom = new THREE.Geometry();
-		geom.vertices = curve.getPoints(50);
+		geom.vertices = curve.getPoints(10);
 		var material = new THREE.LineBasicMaterial({
 			color:new THREE.Color(c[r[0]>=9?9:r[0]])
 		})
 		g.add(new THREE.Line(geom,material))
+		if(i>100){
+			//break;
+		}
 	}
 }
 
