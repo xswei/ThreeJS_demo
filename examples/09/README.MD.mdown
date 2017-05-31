@@ -1,0 +1,22 @@
+### 法向贴图
+
+与凹凸贴图不同的是，法向贴图可以利用像素变化的坡度信息，所以细节更逼真。
+
+```js
+function createMesh(geom,texturePath,bumpPath){
+	var loader = new THREE.TextureLoader(),
+		mat = new THREE.MeshPhongMaterial();
+		mesh = new THREE.Mesh(geom,mat);
+	loader.load("../images/"+texturePath,(t)=>{
+		mat.map = t;
+		mesh.material.needsUpdate = true;
+	})
+	loader.load("../images/"+bumpPath,(n)=>{
+		mat.normal = n;
+	})
+	return mesh;
+}
+
+```
+
+主要利用了材质的`normal`属性(并非所有类材质都有这个属性).

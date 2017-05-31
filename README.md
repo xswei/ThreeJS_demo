@@ -14,3 +14,5 @@
 ####  (六)[云层+太阳光](https://github.com/xswei/ThreeJS_demo/blob/master/examples/07)
 
 ####  (七)[凹凸贴图](https://github.com/xswei/ThreeJS_demo/blob/master/examples/08)
+
+####  (八)[法向贴图](https://github.com/xswei/ThreeJS_demo/blob/master/examples/09)

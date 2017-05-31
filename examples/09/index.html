@@ -71,7 +71,7 @@
 			var orbit = new THREE.OrbitControls(camera,renderer.domElement);
 
 			var boxGeom = new THREE.BoxGeometry(40,40,40);
-			var boxMesh = createMesh(boxGeom,"stone.jpg","stone-bump.jpg");
+			var boxMesh = createMesh(boxGeom,"plaster.jpg","plaster-normal.jpg");
 			scene.add(boxMesh);
 
 			var render = function(){
@@ -91,11 +91,10 @@
 					mat.map = t;
 					mesh.material.needsUpdate = true;
 				})
-				/*loader.load("../images/"+bumpPath,(b)=>{
-					mat.bump = b;
-					mat.bumpScale = -2;
+				loader.load("../images/"+bumpPath,(n)=>{
+					mat.normalMap = n;
 					mesh.material.needsUpdate = true;
-				})*/
+				})
 				return mesh;
 			}
 
