@@ -52,12 +52,33 @@ FilmPass.js和FilmShader.js文件用来定义一种胶片效果。非Three.js自
 
 var renderPass = new THREE.RenderPass(scene,camera);
 var filmPass = new THREE.FilmPass(0.8,0.325,256,false);
-renderPass.renderToScreen = true;	//设置为true时才会将渲染结果输出到屏幕上
+filmPass.renderToScreen = true;	//设置为true时才会将渲染结果输出到屏幕上
 
 var composer = new THREE.EffectComposer(webglRenderer);
 
 composer.addPass(renderPass);
 composer.addPass(filmPass);
 
+```
+
+### 3. 渲染循环
+
+在使用了后期通道之后，就不能使用原来的渲染循环了，要做一些改动来取代使用webGLRenderer.render来渲染场景。
+
+```js
+var clock = new THREE.Clock();
+function render(){
+	stats.update();
+
+	var delta = clock.getDelta();
+	orbitControls.update(delta);
+
+	sphere.rotation.y += 0.002;
+
+	requestAnimationFrame(render);
+	composer.render(delta);		//使用composer.render来渲染，之前设置了filmPass.renderToScreen = true
+}
 
 ```
+
+![image](https://github.com/xswei/ThreeJS_demo/blob/master/examples/10/filmPass.png)

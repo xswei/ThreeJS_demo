@@ -37,9 +37,15 @@ window.onload = ()=>{
 	directLight.shadow.mapSize.width = 100;
 	scene.add(directLight);
 
+	var composer = new THREE.EffectComposer(renderer);
+	var renderPass = new THREE.RenderPass(scene,camera);
+	var filmPass = new THREE.FilmPass(0.8,0.325,256,false);
+	filmPass.renderToScreen = true;
+
+	composer.addPass(renderPass);
+	composer.addPass(filmPass);
 
 	addEarth(earthG,radius,"e3.png");
-
 
 	var orbit = new THREE.OrbitControls(camera,renderer.domElement);
 	var stats = function(){
@@ -51,13 +57,16 @@ window.onload = ()=>{
 	}();
 	document.querySelector("#map").appendChild(renderer.domElement);
 	document.querySelector("#stats").appendChild(stats.domElement);
+
+	var clock = new THREE.Clock();
 	(function render(){
 			stats.update();
-			orbit.update();
+			var delta = clock.getDelta();
+
+			orbit.update(delta);
 			earthG.rotation.y +=0.001;
-			cloudG.rotation.y +=0.003;
 			requestAnimationFrame(render);
-			renderer.render(scene,camera);
+			composer.render(delta)
 	})();
 }
 function addEarth(g,r,u,pos){
