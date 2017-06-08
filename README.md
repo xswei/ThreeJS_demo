@@ -19,4 +19,6 @@
 
 ---------
 
-####  (九)[后期处理](https://github.com/xswei/ThreeJS_demo/blob/master/examples/10)
+####  (九)[后期处理过程(以FilmPass为例)](https://github.com/xswei/ThreeJS_demo/blob/master/examples/10)
+
+####  (十)[几个后期处理通道](https://github.com/xswei/ThreeJS_demo/blob/master/examples/11)
