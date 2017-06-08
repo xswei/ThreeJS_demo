@@ -16,3 +16,7 @@
 ####  (七)[凹凸贴图](https://github.com/xswei/ThreeJS_demo/blob/master/examples/08)
 
 ####  (八)[法向贴图](https://github.com/xswei/ThreeJS_demo/blob/master/examples/09)
+
+---------
+
+####  (九)[后期处理](https://github.com/xswei/ThreeJS_demo/blob/master/examples/10)
